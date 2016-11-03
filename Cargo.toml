@@ -5,4 +5,4 @@ authors = ["Marek Dudek <marek.dudek@gmail.com>"]
 
 [dependencies]
 chrono = "0.2"
-
+clap = "2"

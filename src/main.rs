@@ -4,39 +4,41 @@ extern crate chrono;
 use clap::{Arg, App};
 use chrono::*;
 
-pub const STRING: &'static str = "static string";
+pub const DATE_FORMAT: &'static str = "%Y-%m-%d";
 
 fn main() {
 
-    let NYSE_START_DATE = NaiveDate::from_ymd(1962, 7, 5);
-    let NYSE_END_DATE = NaiveDate::from_ymd(2131, 1, 2);
-    let DATE_FORMAT = "%Y-%m-%d";
+    let nyse_start_date = NaiveDate::from_ymd(1962, 7, 5);
+    let nyse_end_date = NaiveDate::from_ymd(2131, 1, 2);
 
-    let matches = App::new("Quant Software ")
+    let matches = App::new("Quant Software")
         .version("0.1")
         .author("Marek Dudek")
-        .arg(Arg::with_name("from").long("from").takes_value(true))
+        .arg(Arg::with_name("start-date").long("start-date").takes_value(true))
+        .arg(Arg::with_name("end-date").long("end-date").takes_value(true))
         .get_matches();
 
-    let f1:Option<&str> = matches.value_of("from");//.map(|o| NaiveDate::parse_from_str(s, DATE_FORMAT));//.unwrap_or(NYSE_START_DATE);
-    let f2:Option<Result<_, _>> = f1.map(|s| NaiveDate::parse_from_str(s, DATE_FORMAT));
-    let f3:Option<NaiveDate> = f2.map(|r| r.unwrap());
-    let f4: NaiveDate = f2.map(|r| r.unwrap()).unwrap_or(NYSE_START_DATE);
-    println!("from: {:?}", f1);
-    println!("from: {:?}", f2);
-    println!("from: {:?}", f3);
-    println!("from: {:?}", f4);
+    let start_date = extract_date_with_default(matches.value_of("start-date"), nyse_start_date);
+    let end_date = extract_date_with_default(matches.value_of("end-date"), nyse_end_date);
+    println!("Processing for period between {} and {}.", start_date, end_date);
+}
+
+pub fn extract_date_with_default(param: Option<&str>, default: NaiveDate) -> NaiveDate {
+    let result: Option<Result<NaiveDate, ParseError>> =
+        param.map(|s| NaiveDate::parse_from_str(s, DATE_FORMAT));
+    result.map(|r| r.unwrap()).unwrap_or(default)
 }
 
 
 #[cfg(test)]
 mod tests {
 
-    use chrono::NaiveDate;
+    use super::*;
+    use chrono::*;
 
     #[test]
-    fn parsing_date() {
-        let date = NaiveDate::parse_from_str("1964-07-05", "%Y-%m-%d");
-        assert_eq!(date, Ok(NaiveDate::from_ymd(1964,7,5)));
+    fn parsing_date_with_default() {
+        let date = extract_date_with_default(Some("1962-07-05"), NaiveDate::from_ymd(1962, 7, 5));
+        assert_eq!(date, NaiveDate::from_ymd(1962, 7, 5));
     }
 }

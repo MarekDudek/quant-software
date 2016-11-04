@@ -10,6 +10,7 @@ fn main() {
 
     let nyse_start_date = NaiveDate::from_ymd(1962, 7, 5);
     let nyse_end_date = NaiveDate::from_ymd(2131, 1, 2);
+    let nyse_cob = NaiveTime::from_hms(16, 0, 0);
 
     let matches = App::new("Quant Software")
         .version("0.1")
@@ -20,7 +21,7 @@ fn main() {
 
     let start_date = extract_date_with_default(matches.value_of("start-date"), nyse_start_date);
     let end_date = extract_date_with_default(matches.value_of("end-date"), nyse_end_date);
-    println!("Processing for period between {} and {}.", start_date, end_date);
+    println!("Processing for period between {} and {} (at {}).", start_date, end_date, nyse_cob);
 }
 
 pub fn extract_date_with_default(param: Option<&str>, default: NaiveDate) -> NaiveDate {

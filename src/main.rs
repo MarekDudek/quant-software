@@ -15,3 +15,17 @@ fn main() {
     let from_date = DateTime::parse_from_str(from, "%Y-%m-%d %H:%M:%S %z");
     println!("from: {:?}", from_date);
 }
+
+
+#[cfg(test)]
+mod tests {
+
+    use chrono::NaiveDate;
+
+    #[test]
+    fn parsing_date() {
+        let date = NaiveDate::parse_from_str("1964-07-05", "%Y-%m-%d");
+        assert_eq!(date, Ok(NaiveDate::from_ymd(1964,7,5)));
+    }
+}
+

@@ -33,8 +33,7 @@ fn main() {
     println!("Processing for period between {} and {}.",
              start_date,
              end_date);
-    println!("Tickers: {:?}", tickers);
-
+    println!("Tickers: {}", tickers.join(", "));
 
     // fetch_data(&all_tickers);
 }
@@ -46,19 +45,19 @@ pub fn extract_date_with_default(param: Option<&str>, default: NaiveDate) -> Nai
 }
 
 pub fn read_all_tickers() -> Vec<String> {
-    let path = "/home/marek/Devel/rust/projects/quant_software/src/resources/tickers.txt";
+    let path = "./src/resources/tickers.txt";
     let file = File::open(path).expect("No tickers file");
     let buffer = BufReader::new(file);
     let lines = buffer.lines().map(|l| l.expect("cound not parse ticker line"));
     lines.collect()
 }
 
-pub fn extract_tickers_with_default<'a>(param: Option<&'a str>, default: Vec<String>) -> Vec<String> {
+pub fn extract_tickers_with_default<'a>(param: Option<&'a str>,
+                                        default: Vec<String>)
+                                        -> Vec<String> {
     let tokens: Option<Split<&str>> = param.map(|s| s.split(","));
     let vector: Option<Vec<&str>> = tokens.map(|ts| ts.collect::<Vec<&str>>());
-    let strings: Option<Vec<String>> = vector.map(
-        |v| v.iter().map(|s| s.to_string()).collect()
-    );
+    let strings: Option<Vec<String>> = vector.map(|v| v.iter().map(|s| s.to_string()).collect());
     strings.unwrap_or(default)
 }
 

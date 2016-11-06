@@ -14,7 +14,6 @@ pub const DATE_FORMAT: &'static str = "%Y-%m-%d";
 #[allow(unused_variables)]
 fn main() {
 
-    let all_tickers: Vec<String> = read_all_tickers();
 
     let matches = App::new("Quant Software")
         .version("0.1")
@@ -28,16 +27,16 @@ fn main() {
                                                NaiveDate::from_ymd(1962, 7, 5));
     let end_date = extract_date_with_default(matches.value_of("end-date"),
                                              NaiveDate::from_ymd(2131, 1, 2));
+    let all_tickers = read_all_tickers();
     let tickers = extract_tickers_with_default(matches.value_of("tickers"), all_tickers);
-    let all_t: Vec<String> = vec!["A".to_string()];
-    let contains = tickers.iter().all(|t| all_t.contains(&t));
+    let all_tickers = read_all_tickers();
+    let tickers_exist = tickers.iter().all(|t| all_tickers.contains(&t));
+    assert!(tickers_exist);
 
     println!("Processing for period between {} and {}.",
              start_date,
              end_date);
     println!("Tickers: {}", tickers.join(", "));
-    println!("-----------------");
-    println!("contains: {}", contains);
 
     // fetch_data(&all_tickers);
 }

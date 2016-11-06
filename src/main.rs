@@ -81,8 +81,17 @@ mod tests {
 
     #[test]
     fn parsing_date_with_default() {
-        let date = extract_date_with_default(Some("1962-07-05"), NaiveDate::from_ymd(1962, 7, 5));
-        assert_eq!(date, NaiveDate::from_ymd(1962, 7, 5));
+        let expected = NaiveDate::from_ymd(1962, 7, 5);
+        let actual = extract_date_with_default(Some("1962-07-05"), expected);
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn extracting_tickets() {
+        let param = "A,B,C";
+        let expected = vec!["A".to_string(), "B".to_string(), "C".to_string()];
+        let actual = extract_tickers_with_default(Some(param), vec![]);
+        assert_eq!(expected, actual);
     }
 
     #[test]

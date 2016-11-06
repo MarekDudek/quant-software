@@ -29,11 +29,15 @@ fn main() {
     let end_date = extract_date_with_default(matches.value_of("end-date"),
                                              NaiveDate::from_ymd(2131, 1, 2));
     let tickers = extract_tickers_with_default(matches.value_of("tickers"), all_tickers);
+    let all_t: Vec<String> = vec!["A".to_string()];
+    let contains = tickers.iter().all(|t| all_t.contains(&t));
 
     println!("Processing for period between {} and {}.",
              start_date,
              end_date);
     println!("Tickers: {}", tickers.join(", "));
+    println!("-----------------");
+    println!("contains: {}", contains);
 
     // fetch_data(&all_tickers);
 }

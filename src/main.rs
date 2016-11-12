@@ -11,6 +11,10 @@ use chrono::*;
 
 pub const DATE_FORMAT: &'static str = "%Y-%m-%d";
 
+pub const START_DATE: &'static str = "start-date";
+pub const END_DATE: &'static str = "end-date";
+pub const TICKERS: &'static str = "tickers";
+
 #[allow(unused_variables)]
 fn main() {
 
@@ -18,17 +22,17 @@ fn main() {
     let matches = App::new("Quant Software")
         .version("0.1")
         .author("Marek Dudek")
-        .arg(Arg::with_name("start-date").long("start-date").takes_value(true))
-        .arg(Arg::with_name("end-date").long("end-date").takes_value(true))
-        .arg(Arg::with_name("tickers").long("tickers").takes_value(true))
+        .arg(Arg::with_name(START_DATE).long(START_DATE).takes_value(true))
+        .arg(Arg::with_name(END_DATE).long(END_DATE).takes_value(true))
+        .arg(Arg::with_name(TICKERS).long(TICKERS).takes_value(true))
         .get_matches();
 
-    let start_date = extract_date_with_default(matches.value_of("start-date"),
+    let start_date = extract_date_with_default(matches.value_of(START_DATE),
                                                NaiveDate::from_ymd(1962, 7, 5));
-    let end_date = extract_date_with_default(matches.value_of("end-date"),
+    let end_date = extract_date_with_default(matches.value_of(END_DATE),
                                              NaiveDate::from_ymd(2131, 1, 2));
     let all_tickers = read_all_tickers();
-    let tickers = extract_tickers_with_default(matches.value_of("tickers"), all_tickers);
+    let tickers = extract_tickers_with_default(matches.value_of(TICKERS), all_tickers);
     let all_tickers = read_all_tickers();
     let tickers_exist = tickers.iter().all(|t| all_tickers.contains(&t));
     assert!(tickers_exist);
